@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Header />
-        <div className='bg-dark text-light pt-5' style={{ height: '100vh', }}>
+        <div className='bg-dark text-light pt-5' style={{ minHeight: '100vh', }}>
           <div className='container' style={{paddingTop:'30px'}}>
             <Switch>
               <Route path='/' component={FlickrDashboard} exact />
