@@ -5,6 +5,7 @@ import FlickrImg from './FlickrImage';
 const FlickrDashboard = () => {
   const [imgList, setImgList] = useState();
   const [keyword, setKeyword] = useState();
+  const [isLoading, setLoading] = useState();
   const input = useRef();
 
   useEffect(() => {
@@ -15,15 +16,17 @@ const FlickrDashboard = () => {
 
 
   const getPublicImg = async () => {
-    const data = await axios.get('http://localhost:3000/public');
-    //console.log(data.data);
-    //console.log(imgList);
-    setImgList([...imgList || "",data.data])
-    setKeyword("")
+    var tag = "";
+    if (keyword !== undefined) tag = keyword;
+    await axios.get('/public?keyword=' + tag)
+      .then((response) => {
+        setLoading(false)
+        setImgList(response.data)
+      });
   }
   
   const search = () => {
-    //console.log(keyword)
+    setLoading(true);
     setKeyword(input.current.value)
   }
 
@@ -36,12 +39,32 @@ const FlickrDashboard = () => {
             <button className="btn btn-outline-success my-2 my-sm-0" onClick={search}>Search</button>
           </div>
         </div>
-        <hr style={{margin:"40px 0px 40px 12px",backgroundColor:"#ffffff"}}/>
-        <div className="row">
-          
+        <hr style={{ margin: "40px 0px 40px 12px", backgroundColor: "#ffffff" }} />
+        
+        {isLoading ?
+          <>
+          <div className="spinner-grow text-primary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <div className="spinner-grow text-secondary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <div className="spinner-grow text-success" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <div className="spinner-grow text-danger" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <div className="spinner-grow text-warning" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <div className="spinner-grow text-info" role="status">
+            <span className="sr-only">Loading...</span>
+            </div>
+          </>  :
           <FlickrImg imgList={imgList} />
+        }
         </div>
-      </div>
     </>
   );
 };
